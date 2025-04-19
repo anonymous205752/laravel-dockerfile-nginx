@@ -3,7 +3,7 @@
 📁 Directory Structure
 
 ```sh
-laravel-dockerized/
+laravel-dockerfile-nginx/
 ├── docker/  
 │   ├── nginx/
 │   │   └── default.conf        # NGINX config
@@ -20,21 +20,22 @@ laravel-dockerized/
 ⚙️ Steps to Run
 
 1.  Create a Laravel application inside the `laravel/` directory:
-    Either create a new Laravel app:
-    `laravel new laravel --force`
 
-    Or clone an existing Laravel app:
-    `git clone https://github.com/laravel/laravel.git laravel`
+    -   Either create a new Laravel app:
+        `laravel new laravel --force`
+
+    -   Or clone an existing Laravel app:
+        `git clone https://github.com/laravel/laravel.git laravel`
 
 2.  Update DB config in `laravel/ .env`:
-    Use your external DB credentials for deployment.
 
-    For local testing, set the host like this:
-    `DB_HOST=host.docker.internal`
+    -   Use your external DB credentials for deployment.
 
+    -   For local testing, set the host like this:
+        `DB_HOST=host.docker.internal`
 
 3.  (Optional) If you're building a web app with frontend assets (Vue/React/etc), make sure to **uncomment** the `npm_build` line in
-    `setup_environment` inside `docker/script/startup.sh`.
+    `setup_environment` inside `docker/script/startup.sh`
 
 4.  To test locally:
 
