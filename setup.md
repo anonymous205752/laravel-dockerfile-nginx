@@ -40,10 +40,10 @@ laravel-dockerfile-nginx/
 4.  To test locally:
 
     -   Build the Docker image. 
-        `docker build -t laravel-dockerized:latest .`
+        `docker build -t laravel-dockerfile-nginx:latest .`
 
     -   Run the image on port 8080
-        `docker run -d -p 8080:10000 laravel-dockerized`
+        `docker run -d -p 8080:10000 laravel-dockerfile-nginx`
 
     -   Access the app at: http://localhost:8080
 
