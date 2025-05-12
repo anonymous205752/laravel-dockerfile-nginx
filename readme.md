@@ -1,6 +1,6 @@
 # 🚀 Laravel + Docker + NGINX — Minimal Setup That Just Works
 
-#### A minimal Docker setup for running Laravel with NGINX and Supervisor — works out of the box with no need for config changes before deployment.
+#### Docker setup for running Laravel with NGINX and Supervisor — works out of the box with no need for config changes before deployment.
 ---
 
 ## ✨ Features
