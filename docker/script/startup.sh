@@ -9,8 +9,8 @@ setup_environment() {
     echo "Setting up the environment..."
     grant_execute_permission
     wait_for_db
+    clear_and_optimize_app
     run_migrations
-    optimize_app
     # run_npm_build
     start_supervisor
 }
@@ -20,27 +20,23 @@ grant_execute_permission() {
     chmod a+x ./artisan
 }
 
-
-# Wait for the database to be ready
+# Wait for the database to be ready using netcat (nc)
 wait_for_db() {
     MAX_RETRIES=30
     COUNT=0
-    echo "Waiting for database connection..."
-    
-    # Start the loop for checking the database connection
-    until ./artisan migrate:status 2>&1 | grep -q -E "(Migration table not found|Migration name)" || [ $COUNT -eq $MAX_RETRIES ]; do
-        sleep 1
+    echo "Waiting for database connection at $DB_HOST:$DB_PORT..."
+
+    until nc -z "$DB_HOST" "$DB_PORT"; do
+        sleep 3
         ((COUNT++))
         echo "Retrying... ($COUNT/$MAX_RETRIES)"
+        if [ $COUNT -ge $MAX_RETRIES ]; then
+            echo "❌ Database connection timed out"
+            exit 1
+        fi
     done
 
-    # Check if the connection was successful
-    if [ $COUNT -eq $MAX_RETRIES ]; then
-        echo "Database connection timed out"
-        exit 1
-    else
-        echo "Database Connected"
-    fi
+    echo "✅ Database Connected"
 }
 
 # Run Laravel migrations
@@ -49,10 +45,14 @@ run_migrations() {
     ./artisan migrate --force
 }
 
-# Run Laravel optimize command
-optimize_app() {
-    echo "Optimizing Laravel application..."
-    ./artisan optimize:clear
+# Clear and optimize Laravel cache
+clear_and_optimize_app() {
+    echo "Clearing and optimizing Laravel caches..."
+    ./artisan config:clear
+    ./artisan cache:clear
+    ./artisan route:clear
+    ./artisan view:clear
+    ./artisan config:cache
     ./artisan optimize
 }
 
@@ -70,9 +70,9 @@ run_npm_build() {
     fi
 }
 
-#Start supervisor
+# Start Supervisor
 start_supervisor() {
-    echo "Starting supervisor..."
+    echo "Starting Supervisor..."
     exec /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
 }
 

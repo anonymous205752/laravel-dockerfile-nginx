@@ -29,10 +29,10 @@ COPY . ./
 RUN rm -f /etc/nginx/sites-enabled/default /etc/nginx/conf.d/default.conf
 
 # Copy nginx config
-COPY ./docker/nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY ./docker-setup/docker/nginx/default.conf /etc/nginx/conf.d/default.conf
 
 # Copy supervisor config
-COPY ./docker/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY ./docker-setup/docker/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Run composer install for production
 RUN composer install --ignore-platform-req=php --no-dev --optimize-autoloader --verbose
@@ -43,7 +43,8 @@ RUN mkdir -p storage/framework/{sessions,views,cache} \
     && chmod -R 775 storage bootstrap/cache
 
 # Copy entrypoint script and give execute permission
-COPY ./docker/script/startup.sh /usr/local/bin/startup.sh
+COPY ./docker-setup/docker/startup.sh /usr/local/bin/startup.sh
+
 RUN chmod +x /usr/local/bin/startup.sh
 
 # Expose port 80 to allow incoming connections to the container
