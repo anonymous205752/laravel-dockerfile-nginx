@@ -43,7 +43,8 @@ RUN mkdir -p storage/framework/{sessions,views,cache} \
     && chmod -R 775 storage bootstrap/cache
 
 # Copy entrypoint script and give execute permission
-COPY ./docker-setup/docker/startup.sh /usr/local/bin/startup.sh
+COPY ./docker-setup/docker/script/startup.sh /usr/local/bin/startup.sh
+
 RUN chmod +x /usr/local/bin/startup.sh
 
 # Expose port 10000 (make sure this matches nginx config)
