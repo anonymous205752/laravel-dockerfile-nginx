@@ -34,8 +34,8 @@ COPY ./docker-setup/docker/nginx/default.conf /etc/nginx/conf.d/default.conf
 # Copy supervisor config
 COPY ./docker-setup/docker/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Run composer install for production
-RUN composer install --ignore-platform-req=php --no-dev --optimize-autoloader --verbose
+# Run composer install with dev dependencies (important so Scribe gets installed)
+RUN composer install --ignore-platform-req=php --optimize-autoloader --verbose
 
 # Set correct permissions
 RUN mkdir -p storage/framework/{sessions,views,cache} \
@@ -44,10 +44,9 @@ RUN mkdir -p storage/framework/{sessions,views,cache} \
 
 # Copy entrypoint script and give execute permission
 COPY ./docker-setup/docker/startup.sh /usr/local/bin/startup.sh
-
 RUN chmod +x /usr/local/bin/startup.sh
 
-# Expose port 80 to allow incoming connections to the container
+# Expose port 10000 (make sure this matches nginx config)
 EXPOSE 10000
 
 # Start up all services
